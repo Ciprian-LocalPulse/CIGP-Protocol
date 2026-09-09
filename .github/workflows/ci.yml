@@ -1,0 +1,19 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  spec-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate JSON Schemas
+        run: |
+          echo "Placeholder: validate schemas/*.schema.json against draft-07 meta-schema"
+      - name: Check markdown links
+        run: |
+          echo "Placeholder: lint spec/*.md and README.md"
