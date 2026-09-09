@@ -1,0 +1,16 @@
+[package]
+name = "cigp-proof"
+description = "Construction and independent verification of CIGP RoundProof objects."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+cigp-core = { path = "../cigp-core" }
+cigp-crypto = { path = "../cigp-crypto" }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }

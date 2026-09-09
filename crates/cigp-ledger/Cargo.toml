@@ -1,0 +1,17 @@
+[package]
+name = "cigp-ledger"
+description = "Append-only, hash-linked audit ledger over CIGP RoundProof objects, with Merkle batch commitments."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+cigp-core = { path = "../cigp-core" }
+cigp-crypto = { path = "../cigp-crypto" }
+thiserror = { workspace = true }
+
+[dev-dependencies]
+serde_json = { workspace = true }

@@ -1,0 +1,21 @@
+[package]
+name = "cigp-crypto"
+description = "CIGP cryptographic primitives: SHA-256, commit-reveal HMAC-SHA-256 RNG derivation, Ed25519 signatures, Merkle trees."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+sha2 = { workspace = true }
+hmac = { workspace = true }
+hkdf = { workspace = true }
+hex = { workspace = true }
+rand = { workspace = true }
+rand_core = { workspace = true }
+ed25519-dalek = { workspace = true }
+zeroize = { workspace = true }
+base64ct = { workspace = true }
+thiserror = { workspace = true }

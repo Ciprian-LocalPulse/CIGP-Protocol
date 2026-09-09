@@ -360,6 +360,60 @@ flowchart TB
 | Anomaly Detection | **Python** | Drift detection, ML-based anomaly scoring, research notebooks |
 | Verifier / SDKs | **TypeScript** | Web-based independent verifier, dashboards, client SDKs |
 
+## 14a. Implementation Status (v0.1)
+
+This is the current state of the reference implementation, updated as phases land. Anything not listed here is **DESIGN ONLY** — see the Master Engineering Prompt in `docs/` for the full phase plan.
+
+| Component | Crate / package | Status |
+|---|---|---|
+| Domain types, canonical JSON | `cigp-core` | **IMPLEMENTED** — `RoundProof`, `GameManifest`, `Money` (integer minor units, no floats), RFC 8785-style canonicalization |
+| Cryptographic primitives | `cigp-crypto` | **IMPLEMENTED** — SHA-256 hashing/commitments, `CIGP-REFERENCE-HMAC-SHA256` commit-reveal RNG derivation, HKDF expansion, Ed25519 signing/verification, domain-separated Merkle trees with inclusion proofs |
+| Proof construction & verification | `cigp-proof` | **IMPLEMENTED** — `build_round_proof`, `compute_round_hash`, `verify_round_proof` producing a field-by-field `VerificationReport` |
+| Audit ledger | `cigp-ledger` | **IMPLEMENTED** — append-only hash-linked chain, independent `verify_chain`, Merkle batch commitment over stored rounds |
+| CLI verifier (`cigp verify`) | `cli/cigp` | NOT IMPLEMENTED |
+| Demo slot simulator | `simulator/slot` | NOT IMPLEMENTED |
+| Statistical engine | `julia/CIGPStatistics.jl` | NOT IMPLEMENTED |
+| Anomaly research layer | `python/cigp_anomaly` | NOT IMPLEMENTED |
+| Browser verifier | `typescript/cigp-verifier` | NOT IMPLEMENTED |
+| Cross-language test vectors | `test-vectors/` | NOT IMPLEMENTED |
+
+### Building and testing the Rust core
+
+```bash
+# From the repository root
+cargo build --workspace
+cargo test --workspace
+```
+
+### Running the tamper-detection demonstration
+
+`cigp-proof` ships an example that builds a valid, signed `RoundProof`, verifies it, then deliberately tampers with the `payout` field and re-verifies to show the tamper is caught:
+
+```bash
+cargo run -p cigp-proof --example tamper_demo
+```
+
+Expected output:
+
+```
+CIGP Verification
+Protocol version: 0.1
+Round ID: round-demo-0001
+Signature: PASS
+Commitment: PASS
+Seed derivation: PASS
+Round hash: PASS
+RESULT: VALID
+
+CIGP Verification (tampered payout)
+Round ID: round-demo-0001
+Signature: PASS
+Round hash: FAIL
+RESULT: INVALID
+```
+
+Note that `Signature: PASS` still holds against the tampered proof, because the Ed25519 signature is checked against the proof's *stored* `round_hash` field, which the tamperer did not update; the check that actually catches the tamper is `Round hash: FAIL` — the independently *recomputed* hash over the (now-inconsistent) content no longer matches. `VerificationReport::is_valid()` requires every check to pass, so the overall result is correctly `INVALID`. A full CLI verifier (`cigp verify`) that also cross-checks a claimed `round_hash` against a separately supplied expectation is planned as the next phase.
+
 ## 15. Roadmap
 
 ```mermaid
