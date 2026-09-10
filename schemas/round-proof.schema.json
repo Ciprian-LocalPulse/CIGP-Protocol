@@ -10,7 +10,6 @@
     "operator_id",
     "game_id",
     "game_version",
-    "currency",
     "bet",
     "server_commitment",
     "client_seed",
@@ -20,6 +19,7 @@
     "outcome",
     "paytable_hash",
     "game_logic_hash",
+    "configuration_hash",
     "payout",
     "previous_round_hash",
     "round_hash",
@@ -32,9 +32,8 @@
     "operator_id": { "type": "string", "minLength": 1 },
     "game_id": { "type": "string", "minLength": 1 },
     "game_version": { "type": "string", "minLength": 1 },
-    "currency": { "type": "string", "pattern": "^[A-Z]{3}$" },
-    "bet": { "type": "string", "pattern": "^[0-9]+\\.[0-9]{2}$" },
-    "server_commitment": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "server_commitment": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "server_seed": { "type": ["string", "null"] },
     "client_seed": { "type": "string", "minLength": 1 },
     "nonce": { "type": "integer", "minimum": 0 },
     "rng": {
@@ -68,11 +67,29 @@
     },
     "paytable_hash": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
     "game_logic_hash": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
-    "payout": { "type": "string", "pattern": "^[0-9]+\\.[0-9]{2}$" },
+    "configuration_hash": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
     "previous_round_hash": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
     "round_hash": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
-    "signature": { "type": "string", "pattern": "^ed25519:[a-f0-9]+$" },
-    "timestamp": { "type": "string", "format": "date-time" }
+    "signature": { "type": "string", "pattern": "^[a-f0-9]{128}$" },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "bet": {
+      "type": "object",
+      "required": ["currency", "minor_units"],
+      "properties": {
+        "currency": { "type": "array", "items": { "type": "integer", "minimum": 0, "maximum": 255 }, "minItems": 3, "maxItems": 3 },
+        "minor_units": { "type": "integer" }
+      },
+      "additionalProperties": false
+    },
+    "payout": {
+      "type": "object",
+      "required": ["currency", "minor_units"],
+      "properties": {
+        "currency": { "type": "array", "items": { "type": "integer", "minimum": 0, "maximum": 255 }, "minItems": 3, "maxItems": 3 },
+        "minor_units": { "type": "integer" }
+      },
+      "additionalProperties": false
+    }
   },
   "additionalProperties": false
 }

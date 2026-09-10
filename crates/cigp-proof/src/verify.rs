@@ -23,7 +23,10 @@ pub struct VerificationReport {
 impl VerificationReport {
     /// Overall pass/fail: every individual check must pass.
     pub fn is_valid(&self) -> bool {
-        self.signature.is_pass() && self.commitment.is_pass() && self.seed_derivation.is_pass() && self.round_hash.is_pass()
+        self.signature.is_pass()
+            && self.commitment.is_pass()
+            && self.seed_derivation.is_pass()
+            && self.round_hash.is_pass()
     }
 }
 
@@ -41,7 +44,10 @@ pub enum VerifyError {
 ///
 /// `operator_public_key_hex` is the operator's published Ed25519 public key,
 /// used to check `signature`.
-pub fn verify_round_proof(proof: &RoundProof, operator_public_key_hex: &str) -> Result<VerificationReport, VerifyError> {
+pub fn verify_round_proof(
+    proof: &RoundProof,
+    operator_public_key_hex: &str,
+) -> Result<VerificationReport, VerifyError> {
     if proof.cigp_version != CIGP_VERSION {
         return Err(VerifyError::UnsupportedVersion(proof.cigp_version.clone()));
     }
@@ -49,7 +55,8 @@ pub fn verify_round_proof(proof: &RoundProof, operator_public_key_hex: &str) -> 
     let recomputed_hash = compute_round_hash(proof)?;
     let round_hash_ok = recomputed_hash == proof.round_hash;
 
-    let signature_ok = verify_signature(operator_public_key_hex, &proof.round_hash, &proof.signature).is_ok();
+    let signature_ok =
+        verify_signature(operator_public_key_hex, &proof.round_hash, &proof.signature).is_ok();
 
     let commitment_ok = match &proof.server_seed {
         Some(seed) => commit(seed) == proof.server_commitment,

@@ -87,7 +87,10 @@ pub struct RoundInputs {
 /// Build, hash, and sign a complete RoundProof from round inputs and an
 /// operator keypair. The server seed is included in the returned proof
 /// (post-reveal); operators publishing pre-reveal proofs should strip it.
-pub fn build_round_proof(inputs: RoundInputs, keypair: &OperatorKeypair) -> Result<RoundProof, CigpError> {
+pub fn build_round_proof(
+    inputs: RoundInputs,
+    keypair: &OperatorKeypair,
+) -> Result<RoundProof, CigpError> {
     let server_commitment = commit(&inputs.server_seed);
     let rng_output = derive_rng_output(&inputs.server_seed, &inputs.client_seed, inputs.nonce);
 

@@ -1,0 +1,17 @@
+[package]
+name = "cigp"
+description = "CIGP reference command-line generator and independent verifier."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+cigp-core = { path = "../../crates/cigp-core" }
+cigp-proof = { path = "../../crates/cigp-proof" }
+cigp-crypto = { path = "../../crates/cigp-crypto" }
+cigp-demo-slot = { path = "../../simulator/slot" }
+serde_json = { workspace = true }
+serde = { workspace = true }

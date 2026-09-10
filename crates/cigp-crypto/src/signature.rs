@@ -53,13 +53,22 @@ impl OperatorKeypair {
 
 /// Verify a hex-encoded Ed25519 signature over a round hash, given the
 /// operator's hex-encoded public key.
-pub fn verify(public_key_hex: &str, round_hash: &str, signature_hex: &str) -> Result<(), SignatureError> {
+pub fn verify(
+    public_key_hex: &str,
+    round_hash: &str,
+    signature_hex: &str,
+) -> Result<(), SignatureError> {
     let pk_bytes = hex::decode(public_key_hex)?;
-    let pk_arr: [u8; 32] = pk_bytes.try_into().map_err(|_| SignatureError::InvalidBytes)?;
-    let verifying_key = VerifyingKey::from_bytes(&pk_arr).map_err(|_| SignatureError::InvalidBytes)?;
+    let pk_arr: [u8; 32] = pk_bytes
+        .try_into()
+        .map_err(|_| SignatureError::InvalidBytes)?;
+    let verifying_key =
+        VerifyingKey::from_bytes(&pk_arr).map_err(|_| SignatureError::InvalidBytes)?;
 
     let sig_bytes = hex::decode(signature_hex)?;
-    let sig_arr: [u8; 64] = sig_bytes.try_into().map_err(|_| SignatureError::InvalidBytes)?;
+    let sig_arr: [u8; 64] = sig_bytes
+        .try_into()
+        .map_err(|_| SignatureError::InvalidBytes)?;
     let signature = Signature::from_bytes(&sig_arr);
 
     verifying_key

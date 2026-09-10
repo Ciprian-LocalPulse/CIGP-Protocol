@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CIGP Evidence Certificate",
+  "type": "object",
+  "required": ["cigp_version", "subject", "status", "issuer_type"],
+  "properties": {
+    "cigp_version": { "const": "0.1" },
+    "subject": { "type": "string", "minLength": 1 },
+    "status": { "enum": ["UNVERIFIED", "SELF_ATTESTED", "LAB_CERTIFIED"] },
+    "issuer_type": { "enum": ["NONE", "OPERATOR", "LABORATORY", "REGULATOR"] },
+    "reference": { "type": "string" }
+  },
+  "additionalProperties": false
+}

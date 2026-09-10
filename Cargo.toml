@@ -5,6 +5,8 @@ members = [
     "crates/cigp-crypto",
     "crates/cigp-proof",
     "crates/cigp-ledger",
+    "cli/cigp",
+    "simulator/slot",
 ]
 
 [workspace.package]
@@ -28,4 +30,3 @@ rand_core = { version = "0.6", features = ["getrandom"] }
 ed25519-dalek = { version = "=2.0.0", features = ["rand_core"] }
 zeroize = "=1.7.0"
 base64ct = "=1.6.0"
-

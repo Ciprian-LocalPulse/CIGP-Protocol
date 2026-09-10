@@ -20,7 +20,9 @@ pub mod hashing;
 pub mod merkle;
 pub mod signature;
 
-pub use commit_reveal::{commit, derive_rng_output, generate_server_seed, hkdf_expand, verify_commitment};
+pub use commit_reveal::{
+    commit, derive_rng_output, generate_server_seed, hkdf_expand, verify_commitment,
+};
 pub use hashing::{sha256_bytes, sha256_hex, sha256_hex_raw};
 pub use merkle::{MerkleError, MerkleTree, ProofStep};
 pub use signature::{verify as verify_signature, OperatorKeypair, SignatureError};

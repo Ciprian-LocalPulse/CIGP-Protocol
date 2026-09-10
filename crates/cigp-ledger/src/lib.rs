@@ -98,7 +98,11 @@ impl AuditLedger {
         if self.rounds.is_empty() {
             return Err(LedgerError::Empty);
         }
-        let leaves: Vec<Vec<u8>> = self.rounds.iter().map(|r| r.round_hash.clone().into_bytes()).collect();
+        let leaves: Vec<Vec<u8>> = self
+            .rounds
+            .iter()
+            .map(|r| r.round_hash.clone().into_bytes())
+            .collect();
         Ok(MerkleTree::build(&leaves)?)
     }
 }
@@ -145,7 +149,9 @@ mod tests {
     #[test]
     fn accepts_correctly_linked_chain() {
         let mut ledger = AuditLedger::new();
-        ledger.append(dummy_round("r1", GENESIS_HASH, "hash1")).unwrap();
+        ledger
+            .append(dummy_round("r1", GENESIS_HASH, "hash1"))
+            .unwrap();
         ledger.append(dummy_round("r2", "hash1", "hash2")).unwrap();
         assert!(ledger.verify_chain().is_ok());
     }
@@ -153,7 +159,9 @@ mod tests {
     #[test]
     fn rejects_broken_link_on_append() {
         let mut ledger = AuditLedger::new();
-        ledger.append(dummy_round("r1", GENESIS_HASH, "hash1")).unwrap();
+        ledger
+            .append(dummy_round("r1", GENESIS_HASH, "hash1"))
+            .unwrap();
         let err = ledger.append(dummy_round("r2", "wrong-previous", "hash2"));
         assert!(err.is_err());
     }
@@ -161,7 +169,9 @@ mod tests {
     #[test]
     fn detects_post_hoc_tampering_via_verify_chain() {
         let mut ledger = AuditLedger::new();
-        ledger.append(dummy_round("r1", GENESIS_HASH, "hash1")).unwrap();
+        ledger
+            .append(dummy_round("r1", GENESIS_HASH, "hash1"))
+            .unwrap();
         ledger.append(dummy_round("r2", "hash1", "hash2")).unwrap();
         // Simulate storage-level tampering: edit round 1's hash directly.
         ledger.rounds[0].round_hash = "tampered".into();
@@ -171,7 +181,9 @@ mod tests {
     #[test]
     fn merkle_batch_and_inclusion_proof() {
         let mut ledger = AuditLedger::new();
-        ledger.append(dummy_round("r1", GENESIS_HASH, "hash1")).unwrap();
+        ledger
+            .append(dummy_round("r1", GENESIS_HASH, "hash1"))
+            .unwrap();
         ledger.append(dummy_round("r2", "hash1", "hash2")).unwrap();
         ledger.append(dummy_round("r3", "hash2", "hash3")).unwrap();
         let tree = ledger.merkle_batch().unwrap();

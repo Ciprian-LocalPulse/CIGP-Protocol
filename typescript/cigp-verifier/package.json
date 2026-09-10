@@ -1,0 +1,8 @@
+{
+  "name": "@cigp/verifier",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Dependency-light browser-side CIGP evidence helpers",
+  "type": "module",
+  "scripts": { "test": "node --test" }
+}

@@ -13,6 +13,6 @@ pub mod types;
 pub use error::CigpError;
 pub use money::Money;
 pub use types::{
-    CheckResult, GameManifest, HashRef, Mathematics, MappingEvidence, RngEvidence, RngProfile,
+    CheckResult, GameManifest, HashRef, MappingEvidence, Mathematics, RngEvidence, RngProfile,
     RoundProof, CIGP_VERSION, REFERENCE_RNG_PROFILE,
 };

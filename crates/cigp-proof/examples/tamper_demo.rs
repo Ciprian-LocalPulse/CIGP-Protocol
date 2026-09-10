@@ -48,7 +48,11 @@ fn main() {
     println!("Round hash: {}", report.round_hash);
     println!(
         "RESULT: {}",
-        if report.is_valid() { "VALID" } else { "INVALID" }
+        if report.is_valid() {
+            "VALID"
+        } else {
+            "INVALID"
+        }
     );
 
     // 2. Tamper with the payout after the fact (e.g. a compromised database
@@ -65,7 +69,11 @@ fn main() {
     println!("Round hash: {}", tampered_report.round_hash);
     println!(
         "RESULT: {}",
-        if tampered_report.is_valid() { "VALID" } else { "INVALID" }
+        if tampered_report.is_valid() {
+            "VALID"
+        } else {
+            "INVALID"
+        }
     );
 
     assert!(report.is_valid());
