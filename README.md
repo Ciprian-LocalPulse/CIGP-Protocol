@@ -143,13 +143,14 @@ The repository keeps its Phase 1 research narrative under version control.
 | Document | Purpose |
 | --- | --- |
 | [MANIFESTO.md](MANIFESTO.md) | Research position and epistemic commitments |
-| [wiki/Home.md](wiki/Home.md) | Wiki entry point |
-| [wiki/01-Research-Question.md](wiki/01-Research-Question.md) | Problem statement and research question |
-| [wiki/02-Architecture.md](wiki/02-Architecture.md) | Architecture and evidence lifecycle |
-| [wiki/03-Verification-Method.md](wiki/03-Verification-Method.md) | Reproducibility and verification method |
-| [wiki/04-Phase-1-Results.md](wiki/04-Phase-1-Results.md) | Implemented milestone and test evidence |
-| [wiki/05-Limitations-and-Roadmap.md](wiki/05-Limitations-and-Roadmap.md) | Limitations and phased research roadmap |
+| [GitHub Wiki](https://github.com/Ciprian-LocalPulse/CIGP-Protocol/wiki) | Wiki entry point |
+| [Research Question](https://github.com/Ciprian-LocalPulse/CIGP-Protocol/wiki/01-Research-Question) | Problem statement and research question |
+| [Architecture](https://github.com/Ciprian-LocalPulse/CIGP-Protocol/wiki/02-Architecture) | Architecture and evidence lifecycle |
+| [Verification Method](https://github.com/Ciprian-LocalPulse/CIGP-Protocol/wiki/03-Verification-Method) | Reproducibility and verification method |
+| [Phase 1 Results](https://github.com/Ciprian-LocalPulse/CIGP-Protocol/wiki/04-Phase-1-Results) | Implemented milestone and test evidence |
+| [Limitations and Roadmap](https://github.com/Ciprian-LocalPulse/CIGP-Protocol/wiki/05-Limitations-and-Roadmap) | Limitations and phased research roadmap |
 | [docs/communications/linkedin-phase-1.md](docs/communications/linkedin-phase-1.md) | LinkedIn launch text |
+| [DONATE.md](DONATE.md) | Support the independent research program |
 
 ## Repository Map
 
