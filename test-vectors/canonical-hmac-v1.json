@@ -1,0 +1,17 @@
+{
+  "profile": "CIGP-REFERENCE-HMAC-SHA256",
+  "canonicalization": {
+    "input": {
+      "z": [3, { "b": 2, "a": 1 }],
+      "a": "cigp"
+    },
+    "canonical_json": "{\"a\":\"cigp\",\"z\":[3,{\"a\":1,\"b\":2}]}",
+    "sha256_hex": "181afed0f3aba1ad21b26fefb99455dd6d252ccf38c77f69cf6659b8c53c67f7"
+  },
+  "hmac_derivation": {
+    "server_seed_hex": "2222222222222222222222222222222222222222222222222222222222222222",
+    "client_seed": "cigp-demo-client-0",
+    "nonce": 0,
+    "rng_output_hex": "a561d3c19ba7726dcf99c579e93360b2dce85226e172af7d368243d56c580d68"
+  }
+}

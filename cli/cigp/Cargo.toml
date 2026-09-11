@@ -13,5 +13,7 @@ cigp-core = { path = "../../crates/cigp-core" }
 cigp-proof = { path = "../../crates/cigp-proof" }
 cigp-crypto = { path = "../../crates/cigp-crypto" }
 cigp-demo-slot = { path = "../../simulator/slot" }
+cigp-ledger = { path = "../../crates/cigp-ledger" }
+cigp-statistics = { path = "../../crates/cigp-statistics" }
 serde_json = { workspace = true }
 serde = { workspace = true }

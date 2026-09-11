@@ -5,6 +5,7 @@ members = [
     "crates/cigp-crypto",
     "crates/cigp-proof",
     "crates/cigp-ledger",
+    "crates/cigp-statistics",
     "cli/cigp",
     "simulator/slot",
 ]

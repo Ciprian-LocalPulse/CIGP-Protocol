@@ -1,6 +1,6 @@
 {
   "cigp_version": "0.1",
-  "round_id": "demo-round-0001",
+  "round_id": "demo-round-00000000",
   "operator_id": "cigp-reference-operator",
   "game_id": "cigp-demo-slot",
   "game_version": "1.0.0",
@@ -18,16 +18,16 @@
       85,
       82
     ],
-    "minor_units": 1
+    "minor_units": 201
   },
   "server_commitment": "4f2e8d65483c641648cdb374ae9d8abd368d269e4ddffe092a8237b8162cddd6",
   "server_seed": "2222222222222222222222222222222222222222222222222222222222222222",
-  "client_seed": "cigp-demo-client",
+  "client_seed": "cigp-demo-client-0",
   "nonce": 0,
   "rng": {
     "algorithm": "CIGP-REFERENCE-HMAC-SHA256",
     "version": "1",
-    "output": "77edaa062c169bfbc7e174a2867140171a82666bd56f27f463de420f1494edff"
+    "output": "a561d3c19ba7726dcf99c579e93360b2dce85226e172af7d368243d56c580d68"
   },
   "mapping": {
     "algorithm": "CIGP-DEMO-SLOT-MODULO",
@@ -36,16 +36,16 @@
   },
   "outcome": {
     "symbols": [
-      "SEVEN",
       "LEMON",
-      "BAR"
+      "LEMON",
+      "SEVEN"
     ]
   },
   "paytable_hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
   "game_logic_hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
   "configuration_hash": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
   "previous_round_hash": "sha256:genesis",
-  "round_hash": "sha256:4879c131ebac8036ec687452b388c796e6d249979cb9710187c7c1f245b5255e",
-  "signature": "1eb0c5ef36712e0d71c33cd995a8e0424cdc863de8435e01c09163599c779725b3aa7311cd6fab2e98e2ec6d85cf4227d06244f0ac4d52123764f8423f298608",
+  "round_hash": "sha256:bad04ad8bbc5fb3fd165ae225dc415170a3d380e58edec184802c8f81c6d4a6a",
+  "signature": "3dcdea78af5f4bdfdd08e54821b0d7b3f86f4a0f0be95eb4b6591a1aa587454cbc994ea4e5edb7439eb9ac1e46678951f88494d177d87137c86917cbd569cf03",
   "timestamp": "2026-01-01T00:00:00Z"
 }

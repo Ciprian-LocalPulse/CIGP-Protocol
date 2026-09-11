@@ -46,9 +46,12 @@ Phase 1 is an end-to-end research milestone, not a finished certification platfo
 | `cigp` CLI generation and verification | Implemented |
 | Virtual-credit demo slot | Implemented |
 | Tamper fixture and negative verification result | Implemented |
-| Julia statistical utilities | Research reference |
-| Python anomaly utilities | Research reference |
-| TypeScript verifier helpers | Research reference |
+| Batch ledger, reload, and full chain verification | Implemented research reference |
+| Descriptive RTP and payout-variance report | Implemented research reference |
+| Cross-language canonicalization and HMAC vectors | Implemented for Rust, Python, and TypeScript |
+| Julia statistical utilities | Implemented research reference |
+| Python anomaly utilities | Implemented research reference |
+| TypeScript verifier helpers | Implemented research reference |
 | Regulatory certification or real-money operation | Out of scope |
 
 ```mermaid
@@ -78,6 +81,16 @@ cargo run -p cigp -- verify test-vectors/tampered-round.json
 ```
 
 The valid fixture returns `RESULT: VALID`. The tampered fixture deliberately changes the payout and returns `RESULT: INVALID` with exit code `1`.
+
+### Batch ledger and descriptive statistics
+
+```bash
+cargo run -p cigp -- generate-demo-ledger 100 output
+cargo run -p cigp -- ledger-verify output/demo-ledger.jsonl <public-key-hex>
+cargo run -p cigp -- stats output/demo-ledger.jsonl
+```
+
+The batch command produces an append-only JSONL ledger, a public key sidecar, a Merkle root, and a deterministic descriptive-statistics report. See [JSONL ledger operations](docs/operations/jsonl-ledger.md) and [Phase 2/3 release note](docs/releases/phase-2-3.md). These metrics are descriptive only; they do not establish fairness or certification.
 
 ```mermaid
 flowchart TD

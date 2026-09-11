@@ -135,4 +135,17 @@ mod tests {
         let b = json!({"a": 2, "b": 1});
         assert_eq!(canonical_hash(&a).unwrap(), canonical_hash(&b).unwrap());
     }
+
+    #[test]
+    fn canonicalization_matches_cross_language_fixture() {
+        let value = json!({"z": [3, {"b": 2, "a": 1}], "a": "cigp"});
+        assert_eq!(
+            String::from_utf8(canonicalize(&value)).unwrap(),
+            r#"{"a":"cigp","z":[3,{"a":1,"b":2}]}"#
+        );
+        assert_eq!(
+            canonical_hash(&value).unwrap(),
+            "sha256:181afed0f3aba1ad21b26fefb99455dd6d252ccf38c77f69cf6659b8c53c67f7"
+        );
+    }
 }

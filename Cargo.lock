@@ -30,7 +30,9 @@ dependencies = [
  "cigp-core",
  "cigp-crypto",
  "cigp-demo-slot",
+ "cigp-ledger",
  "cigp-proof",
+ "cigp-statistics",
  "serde",
  "serde_json",
 ]
@@ -91,6 +93,14 @@ dependencies = [
  "cigp-crypto",
  "serde",
  "serde_json",
+ "thiserror",
+]
+
+[[package]]
+name = "cigp-statistics"
+version = "0.1.0"
+dependencies = [
+ "serde",
  "thiserror",
 ]
 

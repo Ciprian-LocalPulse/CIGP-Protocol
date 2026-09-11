@@ -9,6 +9,9 @@
 
 use cigp_core::RoundProof;
 use cigp_crypto::{MerkleError, MerkleTree};
+use std::fs::{File, OpenOptions};
+use std::io::{BufRead, BufReader, Write};
+use std::path::{Path, PathBuf};
 use thiserror::Error;
 
 pub const GENESIS_HASH: &str = "sha256:genesis";
@@ -25,6 +28,14 @@ pub enum LedgerError {
     Empty,
     #[error(transparent)]
     Merkle(#[from] MerkleError),
+    #[error("ledger I/O error: {0}")]
+    Io(#[from] std::io::Error),
+    #[error("malformed JSONL ledger entry at line {line}: {source}")]
+    MalformedEntry {
+        line: usize,
+        #[source]
+        source: serde_json::Error,
+    },
 }
 
 /// An in-memory (or backing-store-agnostic) append-only ledger of round
@@ -32,6 +43,59 @@ pub enum LedgerError {
 #[derive(Default)]
 pub struct AuditLedger {
     rounds: Vec<RoundProof>,
+}
+
+/// A durable JSON Lines adapter around [`AuditLedger`]. Each line contains
+/// one serialized `RoundProof`; readers rebuild the logical chain instead of
+/// trusting the storage implementation or its metadata.
+pub struct JsonlLedger {
+    path: PathBuf,
+    ledger: AuditLedger,
+}
+
+impl JsonlLedger {
+    /// Open an existing ledger or initialise an empty logical ledger at `path`.
+    pub fn open(path: impl AsRef<Path>) -> Result<Self, LedgerError> {
+        let path = path.as_ref().to_path_buf();
+        let mut ledger = AuditLedger::new();
+        if path.exists() {
+            let file = File::open(&path)?;
+            for (index, line) in BufReader::new(file).lines().enumerate() {
+                let line = line?;
+                if line.trim().is_empty() {
+                    continue;
+                }
+                let proof =
+                    serde_json::from_str(&line).map_err(|source| LedgerError::MalformedEntry {
+                        line: index + 1,
+                        source,
+                    })?;
+                ledger.append(proof)?;
+            }
+        }
+        Ok(Self { path, ledger })
+    }
+
+    /// Validate the next proof, then synchronously flush it before advancing
+    /// the in-memory chain. A failed file write cannot create a memory-only
+    /// event that appears persisted.
+    pub fn append(&mut self, proof: RoundProof) -> Result<(), LedgerError> {
+        self.ledger.validate_next(&proof)?;
+        let encoded = serde_json::to_string(&proof)
+            .expect("RoundProof serialization is infallible for JSON values");
+        let mut file = OpenOptions::new()
+            .create(true)
+            .append(true)
+            .open(&self.path)?;
+        writeln!(file, "{encoded}")?;
+        file.sync_data()?;
+        self.ledger.append(proof)?;
+        Ok(())
+    }
+
+    pub fn ledger(&self) -> &AuditLedger {
+        &self.ledger
+    }
 }
 
 impl AuditLedger {
@@ -44,6 +108,12 @@ impl AuditLedger {
     /// that. This only enforces that the chain link is structurally
     /// consistent with the current ledger tip.
     pub fn append(&mut self, proof: RoundProof) -> Result<(), LedgerError> {
+        self.validate_next(&proof)?;
+        self.rounds.push(proof);
+        Ok(())
+    }
+
+    fn validate_next(&self, proof: &RoundProof) -> Result<(), LedgerError> {
         let expected_previous = self
             .rounds
             .last()
@@ -51,14 +121,14 @@ impl AuditLedger {
             .unwrap_or_else(|| GENESIS_HASH.to_string());
 
         if proof.previous_round_hash != expected_previous {
-            return Err(LedgerError::ChainBroken {
+            Err(LedgerError::ChainBroken {
                 round_id: proof.round_id.clone(),
                 expected: expected_previous,
                 actual: proof.previous_round_hash.clone(),
-            });
+            })
+        } else {
+            Ok(())
         }
-        self.rounds.push(proof);
-        Ok(())
     }
 
     pub fn len(&self) -> usize {
@@ -195,5 +265,22 @@ mod tests {
                 &tree.root()
             ));
         }
+    }
+
+    #[test]
+    fn jsonl_ledger_persists_and_reloads_chain() {
+        let path = std::env::temp_dir().join(format!("cigp-ledger-{}.jsonl", std::process::id()));
+        let _ = std::fs::remove_file(&path);
+        let mut durable = JsonlLedger::open(&path).unwrap();
+        durable
+            .append(dummy_round("r1", GENESIS_HASH, "hash1"))
+            .unwrap();
+        durable.append(dummy_round("r2", "hash1", "hash2")).unwrap();
+        drop(durable);
+
+        let reloaded = JsonlLedger::open(&path).unwrap();
+        assert_eq!(reloaded.ledger().len(), 2);
+        assert!(reloaded.ledger().verify_chain().is_ok());
+        std::fs::remove_file(path).unwrap();
     }
 }

@@ -109,4 +109,12 @@ mod tests {
         let b = derive_rng_output(&seed, "client-seed-b", 7);
         assert_ne!(a, b);
     }
+
+    #[test]
+    fn reference_vector_matches_cross_language_fixture() {
+        assert_eq!(
+            derive_rng_output(&"22".repeat(32), "cigp-demo-client-0", 0),
+            "a561d3c19ba7726dcf99c579e93360b2dce85226e172af7d368243d56c580d68"
+        );
+    }
 }

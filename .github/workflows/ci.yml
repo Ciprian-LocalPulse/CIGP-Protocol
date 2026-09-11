@@ -17,6 +17,22 @@ jobs:
       - run: cargo test --workspace
       - run: cargo run -p cigp -- generate-demo-round /tmp/cigp-vectors
       - run: cargo run -p cigp -- verify /tmp/cigp-vectors/demo-round.json
+      - run: cargo run -p cigp -- generate-demo-ledger 32 /tmp/cigp-ledger
+      - run: cargo run -p cigp -- ledger-verify /tmp/cigp-ledger/demo-ledger.jsonl "$(cat /tmp/cigp-ledger/demo-ledger.pubkey)"
+      - run: cargo run -p cigp -- stats /tmp/cigp-ledger/demo-ledger.jsonl
+
+  python:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: python
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -r requirements-dev.txt
+      - run: python -m pytest
 
   javascript:
     runs-on: ubuntu-latest
@@ -29,3 +45,12 @@ jobs:
         with:
           node-version: 20
       - run: npm test
+
+  julia:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: julia-actions/setup-julia@v2
+        with:
+          version: "1.10"
+      - run: julia julia/test/runtests.jl

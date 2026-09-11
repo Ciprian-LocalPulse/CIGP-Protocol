@@ -35,9 +35,20 @@ pub fn payout_minor_units(symbols: &[String; 3], bet_minor_units: i64) -> i64 {
 }
 
 pub fn build_demo_round(keypair: &OperatorKeypair) -> Result<RoundProof, cigp_core::CigpError> {
+    build_demo_round_with(keypair, 0, "sha256:genesis")
+}
+
+/// Construct one deterministic virtual-credit round in a hash-linked sequence.
+/// This exists solely for research fixtures and must not be used with a fixed
+/// seed in an operational deployment.
+pub fn build_demo_round_with(
+    keypair: &OperatorKeypair,
+    nonce: u64,
+    previous_round_hash: &str,
+) -> Result<RoundProof, cigp_core::CigpError> {
     let server_seed = SERVER_SEED.repeat(32);
-    let client_seed = "cigp-demo-client";
-    let rng = cigp_crypto::derive_rng_output(&server_seed, client_seed, 0);
+    let client_seed = format!("cigp-demo-client-{nonce}");
+    let rng = cigp_crypto::derive_rng_output(&server_seed, &client_seed, nonce);
     let symbols = symbols_from_rng(&rng);
     let bet =
         Money::new("EUR", 100).map_err(|e| cigp_core::CigpError::InvalidField(e.to_string()))?;
@@ -45,15 +56,15 @@ pub fn build_demo_round(keypair: &OperatorKeypair) -> Result<RoundProof, cigp_co
         .map_err(|e| cigp_core::CigpError::InvalidField(e.to_string()))?;
     build_round_proof(
         RoundInputs {
-            round_id: "demo-round-0001".into(),
+            round_id: format!("demo-round-{nonce:08}"),
             operator_id: "cigp-reference-operator".into(),
             game_id: "cigp-demo-slot".into(),
             game_version: "1.0.0".into(),
             bet,
             payout,
             server_seed,
-            client_seed: client_seed.into(),
-            nonce: 0,
+            client_seed,
+            nonce,
             mapping_algorithm: "CIGP-DEMO-SLOT-MODULO".into(),
             mapping_version: "1".into(),
             mapping_parameters_hash: PAYTABLE_HASH.into(),
@@ -61,8 +72,8 @@ pub fn build_demo_round(keypair: &OperatorKeypair) -> Result<RoundProof, cigp_co
             paytable_hash: PAYTABLE_HASH.into(),
             game_logic_hash: GAME_LOGIC_HASH.into(),
             configuration_hash: CONFIGURATION_HASH.into(),
-            previous_round_hash: "sha256:genesis".into(),
-            timestamp: "2026-01-01T00:00:00Z".into(),
+            previous_round_hash: previous_round_hash.into(),
+            timestamp: format!("2026-01-01T00:00:{:02}Z", nonce % 60),
         },
         keypair,
     )
@@ -82,5 +93,16 @@ mod tests {
             .unwrap()
             .is_valid());
         assert_eq!(proof.bet.currency_code(), "EUR");
+    }
+
+    #[test]
+    fn linked_rounds_refer_to_the_previous_round_hash() {
+        let keypair = OperatorKeypair::from_seed_hex(&"11".repeat(32)).unwrap();
+        let first = build_demo_round_with(&keypair, 0, "sha256:genesis").unwrap();
+        let second = build_demo_round_with(&keypair, 1, &first.round_hash).unwrap();
+        assert_eq!(second.previous_round_hash, first.round_hash);
+        assert!(verify_round_proof(&second, &keypair.public_key_hex())
+            .unwrap()
+            .is_valid());
     }
 }
