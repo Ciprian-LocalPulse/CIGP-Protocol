@@ -1,0 +1,25 @@
+{
+  "cigp_version": "0.1",
+  "receipt_version": "0.1",
+  "subject": {
+    "round_id": "demo-round-00000000",
+    "round_hash": "sha256:bad04ad8bbc5fb3fd165ae225dc415170a3d380e58edec184802c8f81c6d4a6a"
+  },
+  "verifier": {
+    "implementation": "cigp reference CLI",
+    "version": "0.1.0",
+    "profile": "CIGP-REFERENCE-HMAC-SHA256"
+  },
+  "verified_at": "2026-09-11T00:00:00Z",
+  "status": "VALID",
+  "checks": [
+    { "name": "server commitment", "status": "PASS" },
+    { "name": "seed derivation", "status": "PASS" },
+    { "name": "canonical round hash", "status": "PASS" },
+    { "name": "Ed25519 signature", "status": "PASS" }
+  ],
+  "limitations": [
+    "This receipt establishes consistency of supplied evidence only.",
+    "It does not establish fairness, certification, or operator honesty."
+  ]
+}

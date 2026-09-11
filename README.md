@@ -162,7 +162,8 @@ The repository keeps its Phase 1 research narrative under version control.
 | [Verification Method](https://github.com/Ciprian-LocalPulse/CIGP-Protocol/wiki/03-Verification-Method) | Reproducibility and verification method |
 | [Phase 1 Results](https://github.com/Ciprian-LocalPulse/CIGP-Protocol/wiki/04-Phase-1-Results) | Implemented milestone and test evidence |
 | [Limitations and Roadmap](https://github.com/Ciprian-LocalPulse/CIGP-Protocol/wiki/05-Limitations-and-Roadmap) | Limitations and phased research roadmap |
-| [docs/communications/linkedin-phase-1.md](docs/communications/linkedin-phase-1.md) | LinkedIn launch text |
+| [Academic Evidence Package](docs/academic/README.md) | Claim-to-evidence mapping, reproduction procedure, and position paper |
+| [Verification Receipt Standard](docs/standards/verification-receipt.md) | Portable, bounded independent-verification result |
 | [DONATE.md](DONATE.md) | Support the independent research program |
 
 ## Repository Map
